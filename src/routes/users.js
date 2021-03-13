@@ -8,7 +8,7 @@ const router = new express.Router();
 // Create a user
 router.post('/users', async (req, res) => {
   try {
-    const {role} = req.body;
+    const { role } = req.body;
     if (role) throw new Error('you cannot set role property.');
     const user = new User(req.body);
     await user.save();
@@ -19,31 +19,38 @@ router.post('/users', async (req, res) => {
   }
 });
 
-router.post('/users/photo/:id', upload('users').single('file'), async (req, res, next) => {
-  const url = `${req.protocol}://${req.get('host')}`;
-  const { file } = req;
-  const userId = req.params.id;
-  try {
-    if (!file) {
-      const error = new Error('Please upload a file');
-      error.httpStatusCode = 400;
-      return next(error);
+router.post(
+  '/users/photo/:id',
+  upload('users').single('file'),
+  async (req, res, next) => {
+    const url = `${req.protocol}://${req.get('host')}`;
+    const { file } = req;
+    const userId = req.params.id;
+    try {
+      if (!file) {
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error);
+      }
+      const user = await User.findById(userId);
+      if (!user) return res.sendStatus(404);
+      user.imageurl = `${url}/${file.path}`;
+      await user.save();
+      res.send({ user, file });
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(400).send(e);
     }
-    const user = await User.findById(userId);
-    if (!user) return res.sendStatus(404);
-    user.imageurl = `${url}/${file.path}`;
-    await user.save();
-    res.send({ user, file });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(400).send(e);
   }
-});
+);
 
 // Login User
 router.post('/users/login', async (req, res) => {
   try {
-    const user = await User.findByCredentials(req.body.username, req.body.password);
+    const user = await User.findByCredentials(
+      req.body.username,
+      req.body.password
+    );
     const token = await user.generateAuthToken();
     res.send({ user, token });
   } catch (e) {
@@ -128,7 +135,7 @@ router.post('/users/logoutAll', auth.enhance, async (req, res) => {
 });
 
 // Get all users
-router.get('/users', auth.enhance, async (req, res) => {
+router.get('/users', async (req, res) => {
   if (req.user.role !== 'superadmin')
     return res.status(400).send({
       error: 'Only the god can see all the users!',
@@ -171,8 +178,11 @@ router.patch('/users/me', auth.simple, async (req, res) => {
   console.log(req.body);
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'phone', 'username', 'email', 'password'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const { user } = req;
@@ -193,10 +203,20 @@ router.patch('/users/:id', auth.enhance, async (req, res) => {
   const _id = req.params.id;
 
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'phone', 'username', 'email', 'password', 'role'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const allowedUpdates = [
+    'name',
+    'phone',
+    'username',
+    'email',
+    'password',
+    'role',
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const user = await User.findById(_id);
