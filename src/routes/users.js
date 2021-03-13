@@ -148,6 +148,10 @@ router.get('/users', async (req, res) => {
   }
 });
 
+router.get('/test', (req, res) => {
+  res.send('Hello World!');
+});
+
 // User infos
 router.get('/users/me', auth.simple, async (req, res) => {
   try {
