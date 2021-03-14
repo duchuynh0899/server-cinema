@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "database": ""
+    "database": "/Users/georgesimos/mongodb/bin/mongod --dbpath=/Users/georgesimos//mongodb-data"
   },
-  "author": "huynh nguyen",
+  "author": "George Simos <georgesimos.com>",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
