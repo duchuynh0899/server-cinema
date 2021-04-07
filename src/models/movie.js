@@ -6,53 +6,53 @@ const movieSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   image: {
-    type: String
+    type: String,
   },
   language: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   genre: {
     type: String,
     required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   director: {
     type: String,
     required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   cast: {
     type: String,
     required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   description: {
     type: String,
     required: false,
     trim: true,
-    lowercase: true
+    lowercase: true,
   },
   duration: {
     type: Number,
-    required: false
+    required: false,
   },
   releaseDate: {
     type: Date,
-    required: false
+    required: false,
   },
   endDate: {
     type: Date,
-    required: false
-  }
+    required: false,
+  },
 });
 
 const Movie = mongoose.model('Movie', movieSchema);
