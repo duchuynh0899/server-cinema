@@ -7,7 +7,7 @@ const userModeling = require('../utils/userModeling');
 const router = new express.Router();
 
 // Create a movie
-router.post('/movies', auth.enhance, async (req, res) => {
+router.post('/movies', async (req, res) => {
   const movie = new Movie(req.body);
   try {
     await movie.save();
@@ -82,9 +82,12 @@ router.put('/movies/:id', auth.enhance, async (req, res) => {
     'releaseDate',
     'endDate',
   ];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const movie = await Movie.findById(_id);
