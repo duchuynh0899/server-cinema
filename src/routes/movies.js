@@ -33,7 +33,7 @@ router.get(
       }
       const movie = await Movie.findById(movieId);
       if (!movie) return res.sendStatus(404);
-      movie.image = `${url}/${file.path}`;
+      movie.image = `${url}/${file.path.replace('\\', '/')}`;
       await movie.save();
       res.send({ movie, file });
     } catch (e) {
@@ -73,6 +73,7 @@ router.put('/movies/:id', auth.enhance, async (req, res) => {
   const allowedUpdates = [
     'title',
     'image',
+    'trainer',
     'language',
     'genre',
     'director',
