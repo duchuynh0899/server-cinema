@@ -17,26 +17,30 @@ router.post('/cinemas', auth.enhance, async (req, res) => {
   }
 });
 
-router.post('/cinemas/photo/:id', upload('cinemas').single('file'), async (req, res, next) => {
-  const url = `${req.protocol}://${req.get('host')}`;
-  const { file } = req;
-  const movieId = req.params.id;
-  try {
-    if (!file) {
-      const error = new Error('Please upload a file');
-      error.httpStatusCode = 400;
-      return next(error);
+router.post(
+  '/cinemas/photo/:id',
+  upload('cinemas').single('file'),
+  async (req, res, next) => {
+    const url = `${req.protocol}://${req.get('host')}`;
+    const { file } = req;
+    const movieId = req.params.id;
+    try {
+      if (!file) {
+        const error = new Error('Please upload a file');
+        error.httpStatusCode = 400;
+        return next(error);
+      }
+      const cinema = await Cinema.findById(movieId);
+      if (!cinema) return res.sendStatus(404);
+      cinema.image = `${url}/${file.path.replace('\\', '/')}`;
+      await cinema.save();
+      res.send({ cinema, file });
+    } catch (e) {
+      console.log(e);
+      res.sendStatus(400).send(e);
     }
-    const cinema = await Cinema.findById(movieId);
-    if (!cinema) return res.sendStatus(404);
-    cinema.image = `${url}/${file.path}`;
-    await cinema.save();
-    res.send({ cinema, file });
-  } catch (e) {
-    console.log(e);
-    res.sendStatus(400).send(e);
   }
-});
+);
 
 // Get all cinemas
 router.get('/cinemas', async (req, res) => {
@@ -64,10 +68,19 @@ router.get('/cinemas/:id', async (req, res) => {
 router.patch('/cinemas/:id', auth.enhance, async (req, res) => {
   const _id = req.params.id;
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['name', 'ticketPrice', 'city', 'seats', 'seatsAvailable'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const allowedUpdates = [
+    'name',
+    'ticketPrice',
+    'city',
+    'seats',
+    'seatsAvailable',
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const cinema = await Cinema.findById(_id);
@@ -97,7 +110,10 @@ router.get('/cinemas/usermodeling/:username', async (req, res) => {
   const { username } = req.params;
   try {
     const cinemas = await Cinema.find({});
-    const cinemasUserModeled = await userModeling.cinemaUserModeling(cinemas, username);
+    const cinemasUserModeled = await userModeling.cinemaUserModeling(
+      cinemas,
+      username
+    );
     res.send(cinemasUserModeled);
   } catch (e) {
     res.status(400).send(e);
