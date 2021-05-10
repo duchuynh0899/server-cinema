@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 const movieSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     lowercase: true,
   },
