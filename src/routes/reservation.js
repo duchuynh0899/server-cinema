@@ -10,7 +10,9 @@ const router = new express.Router();
 router.post('/reservations', auth.simple, async (req, res) => {
   const reservation = new Reservation(req.body);
 
-  const QRCode = await generateQR(`https://elcinema.herokuapp.com/#/checkin/${reservation._id}`);
+  const QRCode = await generateQR(
+    `https://angular-test-1susillzb-duchuynh0899.vercel.app/#/checkin/${reservation._id}`
+  );
 
   try {
     await reservation.save();
@@ -68,9 +70,12 @@ router.patch('/reservations/:id', auth.enhance, async (req, res) => {
     'phone',
     'checkin',
   ];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const reservation = await Reservation.findById(_id);
@@ -97,7 +102,9 @@ router.delete('/reservations/:id', auth.enhance, async (req, res) => {
 router.get('/reservations/usermodeling/:username', async (req, res) => {
   const { username } = req.params;
   try {
-    const suggestedSeats = await userModeling.reservationSeatsUserModeling(username);
+    const suggestedSeats = await userModeling.reservationSeatsUserModeling(
+      username
+    );
     res.send(suggestedSeats);
   } catch (e) {
     res.status(400).send(e);
