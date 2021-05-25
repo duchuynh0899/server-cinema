@@ -45,15 +45,15 @@ router.get('/reservations/:id', async (req, res) => {
 });
 
 // Get reservation info by id
-router.get('/reservations/info/:id', async (req, res) => {
-  const _id = req.params.id;
-  try {
-    const reservation = await Reservation.find((o) => o.username === _id);
-    return !reservation ? res.sendStatus(404) : res.send(reservation);
-  } catch (e) {
-    return res.status(400).send(e);
-  }
-});
+// router.get('/reservations/info/:id', async (req, res) => {
+//   const username = req.params.id;
+//   try {
+//     const reservation = await Reservation.find((o) => o.username === username);
+//     return !reservation ? res.sendStatus(404) : res.send(reservation);
+//   } catch (e) {
+//     return res.status(400).send(e);
+//   }
+// });
 
 // Get reservation checkin by id
 router.get('/reservations/checkin/:id', async (req, res) => {
