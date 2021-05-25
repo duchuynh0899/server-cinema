@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
 const Reservation = require('../models/reservation');
+const User = require('../models/user');
 const userModeling = require('../utils/userModeling');
 const generateQR = require('../utils/generateQRCode');
 
@@ -37,6 +38,17 @@ router.get('/reservations/:id', async (req, res) => {
   const _id = req.params.id;
   try {
     const reservation = await Reservation.findById(_id);
+    return !reservation ? res.sendStatus(404) : res.send(reservation);
+  } catch (e) {
+    return res.status(400).send(e);
+  }
+});
+
+// Get reservation info by id
+router.get('/reservations/info/:id', async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const reservation = await Reservation.findById(username);
     return !reservation ? res.sendStatus(404) : res.send(reservation);
   } catch (e) {
     return res.status(400).send(e);
