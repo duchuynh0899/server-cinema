@@ -194,7 +194,7 @@ router.patch('/users/me', auth.simple, async (req, res) => {
   }
 });
 
-// Admin can update user by id
+// Admin can update user by id đâsd
 router.patch('/users/:id', auth.enhance, async (req, res) => {
   if (req.user.role !== 'superadmin')
     return res.status(400).send({
