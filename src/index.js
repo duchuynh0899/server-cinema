@@ -2,13 +2,6 @@ const express = require('express');
 const path = require('path');
 const Pusher = require("pusher");
 
-const pusher = new Pusher({
-  appId: "1211097",
-  key: "8851a381c185ede1098d",
-  secret: "6597cc465c46fe5f9b02",
-  cluster: "ap1",
-  useTLS: true
-});
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -25,11 +18,6 @@ const showtimeRouter = require('./routes/showtime');
 const reservationRouter = require('./routes/reservation');
 const invitationsRouter = require('./routes/invitations');
 
-
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }))
 const app = express();
 app.disable('x-powered-by');
 const port = process.env.PORT || 8080;
