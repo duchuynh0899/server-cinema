@@ -41,6 +41,10 @@ router.get('/reservations', auth.simple, async (req, res) => {
     const reservations = await Reservation.find({}).populate({
       path: 'movieId',
       select: ['title'],
+    },
+      {
+        path: 'cinemaId',
+        select: ['name'],
     });
     res.send(reservations);
   } catch (e) {
