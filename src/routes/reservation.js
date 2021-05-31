@@ -48,6 +48,19 @@ router.get('/reservations', auth.simple, async (req, res) => {
   }
 });
 
+router.get('/reservations/:username', auth.simple, async (req, res) => {
+  const username = req.params.username;
+  try {
+    const reservations = await Reservation.find({ username }).populate({
+      path: 'movieId',
+      select: ['title'],
+    });
+    res.send(reservations);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 // Get reservation by id
 router.get('/reservations/:id', async (req, res) => {
   const _id = req.params.id;
