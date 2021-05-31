@@ -38,7 +38,7 @@ router.post('/reservations', auth.simple, async (req, res) => {
 // Get all reservations
 router.get('/reservations', auth.simple, async (req, res) => {
   try {
-    const reservations = await Reservation.find({});
+    const reservations = await Reservation.find({}).populate('movies', ['title']);
     res.send(reservations);
   } catch (e) {
     res.status(400).send(e);
