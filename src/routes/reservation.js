@@ -58,7 +58,11 @@ router.get('/reservations/:username', auth.simple, async (req, res) => {
     const reservations = await Reservation.find({ username }).populate({
       path: 'movieId',
       select: ['title'],
-    });
+    }).populate(
+      {
+        path: 'cinemaId',
+        select: ['name'],
+    });;
     res.send(reservations);
   } catch (e) {
     res.status(400).send(e);
