@@ -4,14 +4,14 @@ const Reservation = require('../models/reservation');
 const User = require('../models/user');
 const userModeling = require('../utils/userModeling');
 const generateQR = require('../utils/generateQRCode');
-const Pusher = require("pusher");
+const Pusher = require('pusher');
 
 const pusher = new Pusher({
-  appId: "1211097",
-  key: "8851a381c185ede1098d",
-  secret: "6597cc465c46fe5f9b02",
-  cluster: "ap1",
-  useTLS: true
+  appId: '1211097',
+  key: '8851a381c185ede1098d',
+  secret: '6597cc465c46fe5f9b02',
+  cluster: 'ap1',
+  useTLS: true,
 });
 
 const router = new express.Router();
@@ -26,8 +26,8 @@ router.post('/reservations', auth.simple, async (req, res) => {
 
   try {
     await reservation.save();
-    pusher.trigger("events-channel", "new-like", {
-      likes : reservation
+    pusher.trigger('events-channel', 'new-like', {
+      likes: reservation,
     });
     res.status(201).send({ reservation, QRCode });
   } catch (e) {
@@ -38,7 +38,10 @@ router.post('/reservations', auth.simple, async (req, res) => {
 // Get all reservations
 router.get('/reservations', auth.simple, async (req, res) => {
   try {
-    const reservations = await Reservation.find({}).populate('movies', ['title']);
+    const reservations = await Reservation.find({}).populate({
+      path: 'movie',
+      select: ['title'],
+    });
     res.send(reservations);
   } catch (e) {
     res.status(400).send(e);
