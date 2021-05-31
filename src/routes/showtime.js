@@ -25,6 +25,18 @@ router.get('/showtimes', async (req, res) => {
   }
 });
 
+//get showtime by movie
+
+router.get('/showtimes/:movieid', async (req, res) => {
+  try {
+    const movieid = req.params.movieid;
+    const showtimes = await Showtime.find({movieid});
+    res.send(showtimes);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
+
 // Get showtime by id
 router.get('/showtimes/:id', async (req, res) => {
   const _id = req.params.id;
