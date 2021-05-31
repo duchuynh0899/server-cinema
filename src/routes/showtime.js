@@ -27,10 +27,14 @@ router.get('/showtimes', async (req, res) => {
 
 //get showtime by movie
 
-router.get('/showtimes/:movieid', async (req, res) => {
+
+router.get('/showtimes/:movieid', auth.simple, async (req, res) => {
+  const movieId = req.params.movieid;
   try {
-    const movieId = req.params.movieid;
-    const showtimes = await Showtime.find({ movieId });
+    const showtimes = await Showtime.find({ movieId }).populate({
+      path: 'movieId',
+      select: ['title'],
+    });
     res.send(showtimes);
   } catch (e) {
     res.status(400).send(e);
