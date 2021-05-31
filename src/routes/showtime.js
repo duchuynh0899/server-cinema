@@ -29,8 +29,8 @@ router.get('/showtimes', async (req, res) => {
 
 router.get('/showtimes/:movieid', async (req, res) => {
   try {
-    const movieid = req.params.movieid;
-    const showtimes = await Showtime.find({movieid});
+    const movieId = req.params.movieid;
+    const showtimes = await Showtime.find({ movieId });
     res.send(showtimes);
   } catch (e) {
     res.status(400).send(e);
