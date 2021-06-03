@@ -34,7 +34,7 @@ router.post(
       }
       const user = await User.findById(userId);
       if (!user) return res.sendStatus(404);
-      user.imageurl = `${url}/${file.path}`;
+      user.imageurl = `${url}/${file.path.replace('\\', '/')}}`;
       await user.save();
       res.send({ user, file });
     } catch (e) {
