@@ -18,14 +18,15 @@ router.post('/showtimes', auth.enhance, async (req, res) => {
 // Get all showtimes
 router.get('/showtimes', async (req, res) => {
   try {
-    const showtimes = await Showtime.find({}).populate({
-      path: 'movieId',
-      select: ['title'],
-    }).populate(
-      {
+    const showtimes = await Showtime.find({})
+      .populate({
+        path: 'movieId',
+        select: ['title'],
+      })
+      .populate({
         path: 'cinemaId',
         select: ['name'],
-    });
+      });
     res.send(showtimes);
   } catch (e) {
     res.status(400).send(e);
@@ -34,14 +35,18 @@ router.get('/showtimes', async (req, res) => {
 
 //get showtime by movie
 
-
 router.get('/showtimes/:movieid', auth.simple, async (req, res) => {
   const movieId = req.params.movieid;
   try {
-    const showtimes = await Showtime.find({ movieId }).populate({
-      path: 'movieId',
-      select: ['title'],
-    });
+    const showtimes = await Showtime.find({ movieId })
+      .populate({
+        path: 'movieId',
+        select: ['title'],
+      })
+      .populate({
+        path: 'cinemaId',
+        select: ['name'],
+      });
     res.send(showtimes);
   } catch (e) {
     res.status(400).send(e);
@@ -63,10 +68,19 @@ router.get('/showtimes/:id', async (req, res) => {
 router.patch('/showtimes/:id', auth.enhance, async (req, res) => {
   const _id = req.params.id;
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['startAt', 'startDate', 'endDate', 'movieId', 'cinemaId'];
-  const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
+  const allowedUpdates = [
+    'startAt',
+    'startDate',
+    'endDate',
+    'movieId',
+    'cinemaId',
+  ];
+  const isValidOperation = updates.every((update) =>
+    allowedUpdates.includes(update)
+  );
 
-  if (!isValidOperation) return res.status(400).send({ error: 'Invalid updates!' });
+  if (!isValidOperation)
+    return res.status(400).send({ error: 'Invalid updates!' });
 
   try {
     const showtime = await Showtime.findById(_id);
