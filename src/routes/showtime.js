@@ -18,7 +18,14 @@ router.post('/showtimes', auth.enhance, async (req, res) => {
 // Get all showtimes
 router.get('/showtimes', async (req, res) => {
   try {
-    const showtimes = await Showtime.find({});
+    const showtimes = await Showtime.find({}).populate({
+      path: 'movieId',
+      select: ['title'],
+    }).populate(
+      {
+        path: 'cinemaId',
+        select: ['name'],
+    });
     res.send(showtimes);
   } catch (e) {
     res.status(400).send(e);
