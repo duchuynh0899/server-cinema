@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   // tls: {
   //   rejectUnauthorized: false,
   // },
-  host: 'smtp.gmail.com',
+  host: 'https://server-cinema.herokuapp.com',
   port: 465,
   secure: true,
   auth: {
