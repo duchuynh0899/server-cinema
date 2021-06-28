@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  service: 'smtp.gmail.com', //smtp.gmail.com  //in place of service use host...
+  service: 'https://server-cinema.herokuapp.com', //smtp.gmail.com  //in place of service use host...
   secure: true, //true
   port: 465, //465
   auth: {
