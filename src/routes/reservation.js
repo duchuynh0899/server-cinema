@@ -21,7 +21,7 @@ router.post('/reservations', auth.simple, async (req, res) => {
   const reservation = new Reservation(req.body);
 
   const QRCode = await generateQR(
-    `https://angular-test-e1b93wpxu-duchuynh0899.vercel.app/checkin/${reservation._id}`
+    `https://angular-test-84wostvpy-duchuynh0899.vercel.app/checkin/${reservation._id}`
   );
 
   try {
